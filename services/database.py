@@ -6,13 +6,12 @@ from sqlalchemy import create_engine
 
 class DataBase:
 
-    def __init__(self, table_name:str, database:str, user:str, password:str, host:str, port:str):
+    def __init__(self, database:str, user:str, password:str, host:str, port:str):
         self.host = host
         self.port = port
         self.user = user
         self.database = database
         self.password = password
-        self.table_name = table_name
 
         self.connection = self.__connection()
 
@@ -52,12 +51,12 @@ class DataBase:
         self.__close_connection()
 
 
-    def _drop_table(self):
-        print(f'\nDeleting table "{self.table_name}"...')
+    def _drop_table(self, table_name:str):
+        print(f'\nDeleting table "{table_name}"...')
         
         cursor = self.connection.cursor()
 
-        sql = f'''DROP TABLE "{self.table_name}"'''
+        sql = f'''DROP TABLE "{table_name}"'''
         
         # Executing the query
         cursor.execute(sql)
@@ -68,18 +67,18 @@ class DataBase:
         #Closing the connection
         self.__close_connection()
 
-        print(f'---Table "{self.table_name}" deleted!---\n')
+        print(f'---Table "{table_name}" deleted!---\n')
 
 
     def __engine(self):
         return create_engine(f'postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}')
 
         
-    def _create_table_from_df(self, dataframe:pd.DataFrame) -> None:
-        print(f'\nInserting "{self.table_name}" into DataBase...')
-        dataframe.to_sql(self.table_name, self.__engine(), index=False, if_exists='replace')
+    def _create_table_from_df(self, dataframe:pd.DataFrame, table_name:str) -> None:
+        print(f'\nInserting "{table_name}" into DataBase...')
+        dataframe.to_sql(table_name, self.__engine(), index=False, if_exists='replace')
 
-        print(f'---Table "{self.table_name}" inserted in DataBase---\n')
+        print(f'---Table "{table_name}" inserted in DataBase---\n')
 
 
     def __close_connection(self) -> None:

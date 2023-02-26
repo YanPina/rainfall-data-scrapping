@@ -12,6 +12,7 @@ from helpers.worksheetOperations import WorksheetOperations
 
 warnings.filterwarnings("ignore") #Remove unnecessary UserWarnings
 
+
 class GetStationsInformations:
     def __init__(self, stations_folder:str) -> None:
         self.stations_folder = stations_folder
@@ -82,26 +83,46 @@ class GetStationsInformations:
             }
         )
 
+        dataframe_stations = self.__convert_string_to_float(dataframe=dataframe_stations, column="latitude")
+        dataframe_stations = self.__convert_string_to_float(dataframe=dataframe_stations, column="longitude")
+
         return dataframe_stations
+    
+
+    def __convert_string_to_float(self, dataframe:pd.DataFrame, column:str) -> pd.DataFrame:
+        
+        dataframe[f'{column}'] = dataframe[f'{column}'].str.replace(',', '.')
+
+        dataframe[f'{column}'] = dataframe[f'{column}'].astype(float)
+
+        return dataframe
+    
 
     def __download_stations(self) -> None:
-        print('\nDownloading pluviometric stations...\n')
-        for station in self.stations:
-            if not self.__is_worksheet_in_folder(
-                worksheet_folder=self.stations_folder, 
-                worksheet_name=station['csv_name'], 
-                format='csv'
-            ):
-                self.driver._get_url(url=station['url']) 
-                sleep(1)
-                self.driver._click_element(element=station['XPATH_button'], find_method='XPATH')
+        if not self.__is_worksheet_in_folder(
+            worksheet_folder=self.stations_folder, 
+            worksheet_name="stations", 
+            format="xlsx"
+            
+        ):
+            print('\nDownloading pluviometric stations...\n')
+            for station in self.stations:
+                if not self.__is_worksheet_in_folder(
+                    worksheet_folder=self.stations_folder, 
+                    worksheet_name=station['csv_name'], 
+                    format='csv'
+                ):
+                    self.driver._get_url(url=station['url']) 
+                    sleep(1)
+                    self.driver._click_element(element=station['XPATH_button'], find_method='XPATH')
 
-                CheckFileDownload(
-                    filename=station['csv_name'], 
-                    file_folder=self.stations_folder, 
-                    file_format='csv'
-                )
-            sleep(2)
+                    CheckFileDownload(
+                        filename=station['csv_name'], 
+                        file_folder=self.stations_folder, 
+                        file_format='csv'
+                    )
+                sleep(2)
+
 
     def __is_worksheet_in_folder(self, worksheet_folder:str, worksheet_name:str, format:str) -> bool:
         if os.path.isfile(f'{worksheet_folder}/{worksheet_name}.{format}'):

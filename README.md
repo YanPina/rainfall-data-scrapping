@@ -12,6 +12,15 @@ pip install -r requirements.txt
 Python 3.11.1
 ~~~
 
+#### Create .env file and add:
+~~~
+HOST
+PORT
+USER
+DATABASE
+PASSWORD
+~~~
+
 #### Run file:
 ~~~
 main.py
