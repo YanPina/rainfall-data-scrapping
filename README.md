@@ -1,5 +1,5 @@
 # Rainfall data scraping Using Python|Selenium WebDriver
-#### This bot automate rainfall data scraping from 3 different Web Sites (INMET, CEMADEN and CIAGRO) to create a database for Central-South Brazil with more than 1700 pluviometric stations.
+#### This bot automate rainfall data scraping from INMET, The National Institute of Meteorology of Brazil, to create a rainfall database with more than 700 pluviometric stations.
 
 ## Setup:
 #### The run the bot install requirements:

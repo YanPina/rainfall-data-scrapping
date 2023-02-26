@@ -10,6 +10,7 @@ class PluviometricDataScraping:
         
         self.__download_stations_informations()
 
+
     def __download_stations_informations(self) -> None:
         GetStationsInformations(stations_folder=self.worksheets_folder)
 

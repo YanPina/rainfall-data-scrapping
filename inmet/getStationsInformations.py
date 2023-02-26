@@ -43,8 +43,6 @@ class GetStationsInformations:
 
     def __generate_stations_worksheet(self) -> None:
         df_stations = self.__get_df_stations()
-
-        df_stations['CD_ESTACAO'] = df_stations['CD_ESTACAO'].astype(str)
         
         WorksheetOperations(
             dataframe=df_stations,
@@ -67,8 +65,24 @@ class GetStationsInformations:
             
             df = df.append(df_station)
         
-        return df[['DC_NOME', 'SG_ESTADO', 'CD_SITUACAO', 'VL_LATITUDE', 'VL_LONGITUDE', 'CD_ESTACAO']]
+        return self.__format_columns(dataframe_stations=df)
 
+
+    def __format_columns(self, dataframe_stations:pd.DataFrame) -> pd.DataFrame:
+        dataframe_stations = dataframe_stations[['DC_NOME', 'SG_ESTADO', 'CD_SITUACAO', 'VL_LATITUDE', 'VL_LONGITUDE', 'CD_ESTACAO']]
+        dataframe_stations['CD_ESTACAO'] = dataframe_stations['CD_ESTACAO'].astype(str)
+        
+        dataframe_stations = dataframe_stations.rename(columns={
+            "DC_NOME": "station_name", 
+            "SG_ESTADO": "initials_state", 
+            "CD_SITUACAO": "status",
+            "VL_LATITUDE": "latitude",
+            "VL_LONGITUDE": "longitude",
+            "CD_ESTACAO": "station_code"
+            }
+        )
+
+        return dataframe_stations
 
     def __download_stations(self) -> None:
         print('\nDownloading pluviometric stations...\n')
