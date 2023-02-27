@@ -126,6 +126,11 @@ class WebDriver:
         return element.text
     
 
+    def _get_text_from_elements(self, element:str, find_method:str) -> str:
+        element = self._find_elements(element, find_method)
+        return element.text
+    
+
     def _open_new_tab(self) -> None:
         # Open a new window
         self.driver.execute_script("window.open('');")
@@ -145,3 +150,4 @@ class WebDriver:
 
         with open(f'{dest_folder}\\{filename}.{format}', 'wb') as file:
             file.write(element.screenshot_as_png)
+            

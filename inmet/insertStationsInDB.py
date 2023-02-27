@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 
 from services.database import DataBase
@@ -6,7 +5,16 @@ from helpers.worksheetOperations import WorksheetOperations
 
 
 class InsertStationsInDB:
-    def __init__(self, worksheets_folder:str, database:str, user:str, password:str, host:str, port:str) -> None:
+    def __init__(
+            self, 
+            host:str, 
+            port:str,
+            user:str,
+            database:str, 
+            password:str, 
+            worksheets_folder:str,
+        ) -> None:
+        
         self.worksheets_folder = worksheets_folder
 
         self.database = DataBase(

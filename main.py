@@ -1,10 +1,13 @@
 import os
 
+from inmet.getRainfallData import GetRainfallData
 from inmet.insertStationsInDB import InsertStationsInDB
 from inmet.getStationsInformations import GetStationsInformations
 
+
 class PluviometricDataScraping:
-    def __init__(self) -> None:
+    def __init__(self, year_of_interest:str) -> None:
+        self.year_of_interest = year_of_interest
         self.project_folder = os.path.dirname(__file__)
         self.worksheets_folder = f"{self.project_folder}/worksheets"
 
@@ -29,8 +32,14 @@ class PluviometricDataScraping:
             port=self.port
         )
 
+        GetRainfallData(
+            dest_folder=self.worksheets_folder, 
+            year_of_interest=self.year_of_interest
+        )
+
+    
 
 if __name__ == "__main__":
-    PluviometricDataScraping()
+    PluviometricDataScraping(year_of_interest="2023")
 
 

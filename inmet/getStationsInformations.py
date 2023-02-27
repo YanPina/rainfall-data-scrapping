@@ -120,7 +120,7 @@ class GetStationsInformations:
                         filename=station['csv_name'], 
                         file_folder=self.stations_folder, 
                         file_format='csv'
-                    )
+                    )._check_download_finished()
                 sleep(2)
 
 

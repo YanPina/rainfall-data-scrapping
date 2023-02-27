@@ -84,3 +84,4 @@ class DataBase:
     def __close_connection(self) -> None:
         if self.connection is not None:
             self.connection.close()
+
