@@ -28,7 +28,7 @@ class DownloadFile:
         response = self._session.get(self.url, stream=True, timeout=10)
     
         if not response.ok:
-            raise Exception("Failed to get shapefile!")
+            raise Exception("Failed to get your file!")
 
         with open(f"{self.dest_folder}/{self.filename}.{self.format}", "wb") as fd:
             for chunk in tqdm(
