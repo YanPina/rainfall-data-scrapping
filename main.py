@@ -37,8 +37,5 @@ class PluviometricDataScraping:
         )
 
     
-
 if __name__ == "__main__":
     PluviometricDataScraping(year_of_interest="2023")
-
-

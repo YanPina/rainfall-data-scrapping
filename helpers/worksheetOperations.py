@@ -29,7 +29,7 @@ class WorksheetOperations:
                         df = pd.read_csv(f'{self.worksheet_folder}/{self.worksheet_name}.{self.format}', sep=self.sep)
                     
                     case 'xlsx':
-                        df = pd.read_excel(f'{self.worksheet_folder}/{self.worksheet_name}.{self.format}')
+                        df = pd.read_excel(f'{self.worksheet_folder}/{self.worksheet_name}.{self.format}', sheet_name=self.sheet_name)
             except:
                 df = pd.DataFrame()
 
