@@ -1,7 +1,7 @@
-from helpers.downloadFile import DownloadFile
+from scripts.helpers.downloadFile import DownloadFile
 
 
-class GetRainfallData:
+class DownloadRainfallData:
     def __init__(self, dest_folder:str, year_of_interest:str) -> None:
         self.year_of_interest = year_of_interest
         self.dest_folder = dest_folder

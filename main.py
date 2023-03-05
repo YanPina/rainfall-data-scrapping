@@ -1,8 +1,8 @@
 import os
 
-from inmet.getRainfallData import GetRainfallData
-from inmet.insertStationsInDB import InsertStationsInDB
-from inmet.getStationsInformations import GetStationsInformations
+from scripts.inmet.insertStationsInDB import InsertStationsInDB
+from scripts.inmet.downloadRainfallData import DownloadRainfallData
+from scripts.inmet.getStationsInformations import GetStationsInformations
 
 class PluviometricDataScraping:
     def __init__(self, year_of_interest:str) -> None:
@@ -31,7 +31,7 @@ class PluviometricDataScraping:
             port=self.port
         )
 
-        GetRainfallData(
+        DownloadRainfallData(
             dest_folder=self.worksheets_folder, 
             year_of_interest=self.year_of_interest
         )

@@ -29,12 +29,10 @@ class GetDataFromCSV:
 
         self.__get_data()
 
-        self.__rainfall_dataframe()
-
 
     def __get_data(self) -> pd.DataFrame:
         count = 0
-        with open(f"{self.folder}/{self.filename}.csv", newline="", errors="ignore") as csvfile:
+        with open(f"{self.folder}/{self.filename}", newline="", errors="ignore") as csvfile:
             data = csv.reader(csvfile, delimiter=';')
 
             for row in data:
@@ -67,14 +65,12 @@ class GetDataFromCSV:
                 count = count + 1
 
 
-    def __rainfall_dataframe(self) -> pd.DataFrame:
+    def _rainfall_dataframe(self) -> pd.DataFrame:
         dict_data = self.__dict_data()
 
         data = pd.DataFrame(data=dict_data)
 
         data["station_code"] = self.code_station
-
-        data.to_excel(f"{self.folder}/result.xlsx")
 
         return data
     
@@ -120,5 +116,3 @@ class GetDataFromCSV:
             "vento_velocidade_horaria_ms":self.vento_velocidade_horaria_ms,
         }
     
-
-

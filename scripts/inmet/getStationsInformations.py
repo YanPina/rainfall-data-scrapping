@@ -4,10 +4,10 @@ from time import sleep
 
 import pandas as pd
 
-from helpers.seleniumWebDriver import WebDriver
-from helpers.folderOperations import CreateFolders
-from helpers.checkFileDownload import CheckFileDownload
-from helpers.worksheetOperations import WorksheetOperations
+from scripts.helpers.seleniumWebDriver import WebDriver
+from scripts.helpers.folderOperations import CreateFolders
+from scripts.helpers.checkFileDownload import CheckFileDownload
+from scripts.helpers.worksheetOperations import WorksheetOperations
 
 
 warnings.filterwarnings("ignore") #Remove unnecessary UserWarnings

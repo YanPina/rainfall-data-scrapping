@@ -1,7 +1,7 @@
 import pandas as pd
 
-from services.database import DataBase
-from helpers.worksheetOperations import WorksheetOperations
+from scripts.services.database import DataBase
+from scripts.helpers.worksheetOperations import WorksheetOperations
 
 
 class InsertStationsInDB:
