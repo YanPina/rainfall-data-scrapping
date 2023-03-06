@@ -1,7 +1,10 @@
 import csv
+
+import numpy as np
 import pandas as pd
 
-class GetDataFromCSV:
+
+class GetAnnualRainfallDataFromCSV:
     def __init__(self, folder:str, filename:str) -> None:
         self.folder = folder
         self.filename = filename
@@ -71,9 +74,51 @@ class GetDataFromCSV:
         data = pd.DataFrame(data=dict_data)
 
         data["station_code"] = self.code_station
+        
+        data = self.__format_columns(dataframe=data)
 
         return data
     
+
+    def __format_columns(self, dataframe:pd.DataFrame) -> pd.DataFrame:
+        dataframe = dataframe.replace(r'^\s*$', np.nan, regex=True)
+        dataframe = self.__columns_to_float(dataframe=dataframe)
+
+        dataframe["hora_utc"] = dataframe["hora_utc"].str[:2].astype(int)
+
+        dataframe["data"] = dataframe["data"].str.replace("/", "").astype(int)
+        dataframe["station_code"] = dataframe["station_code"].astype("string")
+
+        return dataframe
+    
+  
+    def __columns_to_float(self, dataframe:pd.DataFrame) -> pd.DataFrame:
+        
+        
+        columns_to_float = [
+            "precipitao_total_horario_mm",
+            "pressao_atmosferica_ao_nivel_da_estacao_horaria_mb",
+            "pressao_atmosferica_max_na_hora_ant_aut_mb",
+            "pressao_atmosferica_min_na_hora_ant_aut_mb",
+            "radiacao_global_kjm",
+            "temperatura_do_ar_bulbo_seco_horaria_c",
+            "temperatura_do_ponto_de_orvalho_c",
+            "temperatura_maxima_na_hora_ant_aut_c",
+            "temperatura_minima_na_hora_ant_aut_c",
+            "temperatura_orvalho_max_na_hora_ant_aut_c",
+            "temperatura_orvalho_min_na_hora_ant_aut_c",
+            "umidade_rel_max_na_hora_ant_aut",
+            "umidade_rel_min_na_hora_ant_aut",
+            "umidade_relativa_do_ar_horaria",
+            "vento_direcao_horaria_gr",
+            "vento_rajada_maxima_ms",
+            "vento_velocidade_horaria_ms"
+        ]
+
+        for column in columns_to_float:
+            dataframe[f"{column}"] = dataframe[f"{column}"].astype(float)
+
+        return dataframe
     
     def __improve_number_data(self, row_data:str) -> float | str:
         if row_data != "":

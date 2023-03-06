@@ -1,28 +1,64 @@
 import os
+from pathlib import Path
+from zipfile import ZipFile
+
 import pandas as pd
 
-from scripts.inmet.getRainfallDataFromCSV import GetDataFromCSV
+from scripts.services.database import DataBase
+from scripts.helpers.folderOperations import CreateFolders
+from scripts.inmet.getAnnualRainfallDataFromCSV import GetAnnualRainfallDataFromCSV
 
 
 class InsertRainfallDataInDB:
-    def __init__(self, folder:str) -> None:
+    def __init__(
+            self, 
+            host:str, 
+            port:str,
+            user:str,
+            database:str, 
+            password:str,
+            folder:str,
+            year_of_interest:str
+            ) -> None:
+        
         self.folder = folder
+        self.year_of_interest = year_of_interest
+        self.rainfall_data_folder = f"{self.folder}/rainfall_data_{self.year_of_interest}"
 
-        self.__insert_data()
+        CreateFolders(array_directories=[self.rainfall_data_folder])
+
+        self.database = DataBase(
+            database=database, 
+            port=port, 
+            host=host, 
+            password=password, 
+            user=user
+        )
+
+        self.__unzip()
+        self.__insert_data_into_database()
 
 
-    def __insert_data(self) -> pd.DataFrame:
+    def __insert_data_into_database(self) -> pd.DataFrame:
+        dataframe = self.__get_rainfall_dataframe()
+        self.database._insert_dataframe_into_table(dataframe=dataframe, table_name="rainfall_data")
+        
+
+    def __get_rainfall_dataframe(self) -> pd.DataFrame:
         new_dataframe = pd.DataFrame()
 
-        for csv_file in os.listdir(path=self.folder):
+        for csv_file in os.listdir(path=self.rainfall_data_folder):
             if self.__is_csv_file(csv_file=csv_file):
-            
-                rainfall_dataframe = GetDataFromCSV(folder=self.folder, filename=csv_file)._rainfall_dataframe()
+                station = Path(csv_file).stem
+                print(f"Getting rainfall data from {station} ")
+                rainfall_dataframe = GetAnnualRainfallDataFromCSV(
+                    folder=self.rainfall_data_folder, 
+                    filename=csv_file
+                )._rainfall_dataframe()
 
                 new_dataframe = pd.concat([new_dataframe, rainfall_dataframe], ignore_index=True)
         
-        new_dataframe.to_excel(f"{self.folder}/result.xlsx")
-        print(new_dataframe)
+        return new_dataframe
     
 
     def __is_csv_file(self, csv_file:str) -> bool:
@@ -31,8 +67,9 @@ class InsertRainfallDataInDB:
             return True
         else:
             return False
-        
 
-if __name__ == "__main__":
-    folder = "/Users/yanpina/Downloads/2023"
-    InsertRainfallDataInDB(folder)
+
+    def __unzip(self) -> None:
+        with ZipFile(f"{self.folder}/rainfall_data_{self.year_of_interest}.zip", "r") as zip_ref:
+            zip_ref.extractall(self.rainfall_data_folder)
+            zip_ref.close()

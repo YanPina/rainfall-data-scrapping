@@ -12,10 +12,10 @@ class InsertStationsInDB:
             user:str,
             database:str, 
             password:str, 
-            worksheets_folder:str,
+            stations_folder:str,
         ) -> None:
         
-        self.worksheets_folder = worksheets_folder
+        self.stations_folder = stations_folder
 
         self.database = DataBase(
             database=database, 
@@ -31,7 +31,7 @@ class InsertStationsInDB:
 
     def __get_stations_informations(self) -> pd.DataFrame:
         return WorksheetOperations(
-            worksheet_folder=self.worksheets_folder,
+            worksheet_folder=self.stations_folder,
             worksheet_name="stations",
             format="xlsx"
         )._open_worksheet()
